@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manimic - AI-Powered Manim Video Generator</title>
+    <meta name="description" content="Generate beautiful mathematical and technical animations from text prompts using Gemini and Manim.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Background visual assets -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+    <div class="bg-grid"></div>
+
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="logo-wrapper">
+                <i class="fa-solid fa-wand-magic-sparkles logo-icon"></i>
+                <h1 class="logo-text">Manimic</h1>
+            </div>
+            <p class="tagline">AI-Powered mathematical animations using Gemini & 3Blue1Brown's Manim</p>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace-grid">
+            <!-- Left Panel: Prompts & Config -->
+            <section class="panel glassmorphism-card" id="prompt-panel">
+                <div class="panel-header">
+                    <i class="fa-solid fa-terminal panel-icon"></i>
+                    <h2>Configure Animation</h2>
+                </div>
+                <div class="panel-content">
+                    <div class="input-group">
+                        <label for="prompt-input">What would you like to animate?</label>
+                        <textarea id="prompt-input" placeholder="E.g., Draw a blue circle that slowly transforms into a glowing red square while displaying a label 'Circle to Square'..." rows="5"></textarea>
+                    </div>
+
+                    <!-- Prompt Suggestion Chips -->
+                    <div class="suggestions-wrapper">
+                        <span class="label-tiny">Quick Suggestions:</span>
+                        <div class="chips-container" id="suggestions-container">
+                            <button class="chip" data-prompt="A blue circle that transforms into a red square">Circle Transform</button>
+                            <button class="chip" data-prompt="Animate a sine wave y = sin(x) being drawn progressively with a moving dot">Sine Wave</button>
+                            <button class="chip" data-prompt="Visualize the Pythagorean Theorem with a right-angled triangle and squares expanding on each side">Pythagoras</button>
+                            <button class="chip" data-prompt="Show a binary search tree insertion animation, adding nodes step by step">BST Insertion</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="quality-select">Rendering Quality</label>
+                            <div class="custom-select-wrapper">
+                                <select id="quality-select">
+                                    <option value="l">Low (480p, 15 FPS) - Fast</option>
+                                    <option value="m" selected>Medium (720p, 30 FPS) - Recommended</option>
+                                    <option value="h">High (1080p, 60 FPS) - Production</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="generate-btn" class="btn btn-primary btn-glow">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Generate Video</span>
+                    </button>
+                </div>
+            </section>
+
+
+
+            <!-- Right Panel: Output Video & Log Stream -->
+            <section class="panel glassmorphism-card" id="output-panel">
+                <div class="panel-header">
+                    <i class="fa-solid fa-clapperboard panel-icon"></i>
+                    <h2>Output & Status</h2>
+                </div>
+                <div class="panel-content output-content-wrapper">
+                    <!-- Merged Generation Activity Panel -->
+                    <div class="activity-container terminal-container">
+                        <div class="terminal-header">
+                            <div class="status-indicator">
+                                <div class="status-dot idle" id="status-dot"></div>
+                                <span class="status-text" id="status-text">System Idle</span>
+                            </div>
+                            <div class="progress-bar-container" id="progress-bar-container">
+                                <div class="progress-bar-shimmer" id="progress-bar"></div>
+                            </div>
+                        </div>
+                        <div class="terminal-body" id="terminal-body">
+                            <!-- Terminal log lines will be dynamically appended here -->
+                        </div>
+                    </div>
+
+                    <!-- Video Container -->
+                    <div class="video-container" id="video-container">
+                        <div class="video-placeholder" id="video-placeholder">
+                            <i class="fa-solid fa-video-slash placeholder-icon"></i>
+                            <p>No video generated yet.</p>
+                        </div>
+                        <video id="video-player" controls preload="auto" class="hidden">
+                            <source id="video-source" src="" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
+                    <!-- Download & Export Controls -->
+                    <div class="export-controls hidden" id="export-controls">
+                        <a id="download-link" href="#" download class="btn btn-secondary">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download Video</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Gallery / History Section -->
+        <section class="gallery-section glassmorphism-card">
+            <div class="panel-header">
+                <i class="fa-solid fa-images panel-icon"></i>
+                <h2>Generation History</h2>
+            </div>
+            <div class="panel-content">
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- Gallery cards will be dynamically injected here -->
+                    <div class="gallery-empty" id="gallery-empty">
+                        <i class="fa-solid fa-photo-film"></i>
+                        <p>History is empty. Your rendered videos will show up here.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Script File -->
+    <script src="/script.js"></script>
+</body>
+</html>
