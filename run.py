@@ -3,6 +3,9 @@ import sys
 import subprocess
 import webbrowser
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def check_env():
     """Check if Python virtual environment is set up and key dependencies are present."""

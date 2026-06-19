@@ -1,10 +1,10 @@
 venv/
+
 __pycache__/
 *.pyc
+*.pyo
 
 renders/
-media/
-gallery.json
 
 .env
 .env.local
@@ -16,3 +16,6 @@ gallery.json
 
 .DS_Store
 Thumbs.db
+
+.pytest_cache/
+.mypy_cache/

@@ -7,11 +7,13 @@
 ## Features
 
 - Natural language to animation workflow
-- Automated Manim code generation
+- Automated Manim code generation using Google Gemini
 - Real-time rendering status updates using Server-Sent Events (SSE)
 - Automatic error recovery and code regeneration
 - Interactive video preview and playback
 - Generation history with persistent storage
+- Automatic cleanup of intermediate rendering artifacts
+- Mock LLM mode for frontend and workflow testing
 - Downloadable rendered animations
 - Modern responsive user interface with a premium dark theme
 
@@ -150,18 +152,44 @@ pip install -r backend/requirements.txt
 
 ## Environment Configuration
 
-Set your API key before launching the application.
+Create a `.env` file in the project root.
 
-### Windows
+Example:
 
-```cmd
-set GEMINI_API_KEY=your_api_key_here
+```env
+GEMINI_API_KEY=your_api_key_here
+
+MOCK_LLM_MODE=false
+MOCK_RENDER_FAILURE=false
 ```
 
-### Linux/macOS
+### Configuration Options
 
-```bash
-export GEMINI_API_KEY=your_api_key_here
+| Variable | Description |
+|-----------|-------------|
+| GEMINI_API_KEY | Google Gemini API key |
+| MOCK_LLM_MODE | Uses the mock LLM instead of Gemini |
+| MOCK_RENDER_FAILURE | Simulates render failures for testing retry workflows |
+
+### Development Modes
+
+Run with Gemini:
+
+```env
+MOCK_LLM_MODE=false
+```
+
+Run without consuming Gemini API quota:
+
+```env
+MOCK_LLM_MODE=true
+```
+
+Simulate repair and retry workflows:
+
+```env
+MOCK_LLM_MODE=true
+MOCK_RENDER_FAILURE=true
 ```
 
 ---
@@ -174,13 +202,13 @@ From the project root directory:
 python run.py
 ```
 
-The application will start locally at:
+The application will start locally and automatically open in your default browser.
+
+By default, the application is available at:
 
 ```text
 http://127.0.0.1:8000
 ```
-
-and automatically open in your default browser.
 
 ---
 
@@ -191,6 +219,7 @@ manimic/
 ├── backend/
 │   ├── main.py
 │   ├── llm_service.py
+│   ├── mock_llm_service.py
 │   ├── manim_runner.py
 │   └── requirements.txt
 │
@@ -205,6 +234,7 @@ manimic/
 │   ├── public/
 │   └── gallery.json
 │
+├── .env.example
 ├── run.py
 └── README.md
 ```
@@ -231,6 +261,7 @@ For production deployments, rendering workloads should be isolated inside secure
 - Export to GIF and WebM formats
 - Animation template library
 - Multi-scene video generation
+- Database-backed generation history
 - Advanced render queue management
 - Containerized execution sandbox
 

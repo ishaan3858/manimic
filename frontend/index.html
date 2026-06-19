@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manimic - AI-Powered Manim Video Generator</title>
-    <meta name="description" content="Generate beautiful mathematical and technical animations from text prompts using Gemini and Manim.">
+    <meta name="description"
+        content="Generate beautiful mathematical and technical animations from text prompts using Gemini and Manim.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
     <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
     <!-- Background visual assets -->
     <div class="bg-glow-1"></div>
@@ -26,7 +31,7 @@
                 <i class="fa-solid fa-wand-magic-sparkles logo-icon"></i>
                 <h1 class="logo-text">Manimic</h1>
             </div>
-            <p class="tagline">AI-Powered mathematical animations using Gemini & 3Blue1Brown's Manim</p>
+            <p class="tagline">Transform natural language prompts into animated visual explanations</p>
         </header>
 
         <!-- Main Workspace -->
@@ -40,17 +45,20 @@
                 <div class="panel-content">
                     <div class="input-group">
                         <label for="prompt-input">What would you like to animate?</label>
-                        <textarea id="prompt-input" placeholder="E.g., Draw a blue circle that slowly transforms into a glowing red square while displaying a label 'Circle to Square'..." rows="5"></textarea>
+                        <textarea id="prompt-input"
+                            placeholder="E.g., Draw a blue circle that slowly transforms into a glowing red square while displaying a label 'Circle to Square'..."
+                            rows="5"></textarea>
                     </div>
 
                     <!-- Prompt Suggestion Chips -->
                     <div class="suggestions-wrapper">
                         <span class="label-tiny">Quick Suggestions:</span>
                         <div class="chips-container" id="suggestions-container">
-                            <button class="chip" data-prompt="A blue circle that transforms into a red square">Circle Transform</button>
-                            <button class="chip" data-prompt="Animate a sine wave y = sin(x) being drawn progressively with a moving dot">Sine Wave</button>
-                            <button class="chip" data-prompt="Visualize the Pythagorean Theorem with a right-angled triangle and squares expanding on each side">Pythagoras</button>
-                            <button class="chip" data-prompt="Show a binary search tree insertion animation, adding nodes step by step">BST Insertion</button>
+                            <button class="chip" data-prompt="Create a central sphere with four colored particles orbiting along four visible circular paths. The particles should move continuously at fixed speeds and complete multiple revolutions during the animation.">Atomic Motion</button>
+                            <button class="chip" data-prompt="Animate six colored nodes connected by lines. A dot moves along the connections to show information flowing through the network.">Network Flow</button>
+                            <button class="chip" data-prompt="Animate a satellite orbiting Earth while transmitting signals to the ground.">Satellite Orbit</button>
+                            <button class="chip" data-prompt="Animate a black hole at the center attracting colored particles from different locations. The particles gradually move closer and eventually converge into the black hole.">Black Hole</button>
+                            <button class="chip" data-prompt="Animate an analog clock with moving hour and minute hands showing the passage of time.">Clock</button>
                         </div>
                     </div>
 
@@ -143,4 +151,5 @@
     <!-- Script File -->
     <script src="/script.js"></script>
 </body>
+
 </html>

@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             isProcessing = false;
             translateAndLog(`[CONNECTION ERROR] ${error.message}`, 'error');
-            updateStatus('error', 'Service Temporarily Unavailable');
+            updateStatus('idle', 'System Idle');
             resetButtonUI();
         }
     });
@@ -118,16 +118,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 }
                 const mapped = mapStatusHeader(event.message);
-                updateStatus(mapped.state, mapped.text);
-                
+                updateStatus('generating', 'Working');
+
                 // If it is a repair status, inject attempt details explicitly
                 if (mapped.state === 'repairing' && event.attempt) {
                     translateAndLog(`[STATUS] Repairing animation...`, 'system');
-                    translateAndLog(`[STATUS] Attempt ${event.attempt} of ${event.max_attempts}`, 'system');
+                    translateAndLog(`[STATUS] Repair attempt ${event.attempt} of ${event.max_attempts - 1}`, 'system');
                 } else {
                     translateAndLog(`[STATUS] ${event.message}`, 'system');
                 }
-                
+
                 // Update button text to match current phase
                 if (isProcessing) {
                     if (mapped.state === 'generating') {
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'video':
                 isProcessing = false;
-                updateStatus('complete', 'Completed');
+                updateStatus('idle', 'System Idle');
                 translateAndLog('[SYSTEM] Video rendered and loaded.', 'system');
                 translateAndLog('[SYSTEM] Ready for another prompt.', 'system');
                 loadVideo(event.url);
@@ -158,10 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 isProcessing = false;
                 const errLower = event.message.toLowerCase();
                 if (errLower.includes('unavailable') || errLower.includes('outage') || errLower.includes('timeout') || errLower.includes('connection')) {
-                    updateStatus('error', 'Service Temporarily Unavailable');
+                    updateStatus('idle', 'System Idle');
                     translateAndLog('[SYSTEM] Service temporarily unavailable.', 'error');
                 } else {
-                    updateStatus('failed', 'Generation Failed');
+                    updateStatus('idle', 'System Idle');
                     translateAndLog('[SYSTEM] Generation failed.', 'error');
                 }
                 resetButtonUI();
@@ -175,12 +175,12 @@ document.addEventListener('DOMContentLoaded', () => {
         loggedInSession.clear();
         generateBtn.disabled = true;
         generateBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Processing...</span>';
-        updateStatus('generating', 'Processing');
-        
+        updateStatus('generating', 'Working');
+
         // Clear old terminal
         terminalBody.innerHTML = '';
         translateAndLog('[SYSTEM] Starting generation job...', 'system');
-        
+
         // Reset player/source
         videoPlayer.classList.add('hidden');
         videoPlaceholder.classList.remove('hidden');
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const textLower = cleanText.toLowerCase();
 
         // 1. Blacklist / Filter rules - Discard internal, SDK, stack trace, and raw path info
-        const isBlacklisted = 
+        const isBlacklisted =
             textLower.includes('gemini') ||
             textLower.includes('google') ||
             textLower.includes('python') ||
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
             friendlyMessage = 'Rendering video...';
             lineClass = 'active';
         } else if (textLower.includes('combining') || textLower.includes('movie file')) {
-            friendlyMessage = 'Assembling video chunks...';
+            friendlyMessage = 'Finalizing video...';
             lineClass = 'active';
         } else if (textLower.includes('file ready') || textLower.includes('finalizing')) {
             friendlyMessage = 'Finalizing video...';
@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             friendlyMessage = 'Video generated successfully.';
             lineClass = 'success';
         } else if (textLower.includes('retrying generation')) {
-            friendlyMessage = 'Retrying generation...';
+            friendlyMessage = 'Attempting to reconnect...';
             lineClass = 'warning';
         } else if (textLower.includes('service temporarily unavailable')) {
             friendlyMessage = 'AI service temporarily unavailable.';
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (textLower.includes('attempt') && (textLower.includes('of') || textLower.includes('/'))) {
             const match = cleanText.match(/Attempt\s+(\d+)\s+of\s+(\d+)/i) || cleanText.match(/Attempt\s+(\d+)\/(\d+)/i);
             if (match) {
-                friendlyMessage = `Attempt ${match[1]} of ${match[2]}`;
+                friendlyMessage = `Repair attempt ${match[1]} of ${match[2]}`;
             } else {
                 friendlyMessage = cleanText;
             }
@@ -330,7 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Generating animation...',
                 'Writing animation scene...',
                 'Rendering video...',
-                'Assembling video chunks...',
+                'Repairing animation...',
+                'Finalizing video...',
                 'Finalizing video...',
                 'Video generated successfully.',
                 'Ready for another prompt.'
@@ -384,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
         videoPlayer.classList.remove('hidden');
         videoSource.src = url;
         videoPlayer.load();
-        
+
         // Auto play
         const playPromise = videoPlayer.play();
         if (playPromise !== undefined) {
@@ -404,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/gallery');
             if (!response.ok) return;
             const items = await response.json();
-            
+
             if (items.length === 0) {
                 return;
             }
@@ -415,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
             items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'gallery-card';
-                
+
                 // Format relative or neat date
                 const dateStr = new Date(item.timestamp).toLocaleDateString(undefined, {
                     month: 'short',

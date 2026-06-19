@@ -15,6 +15,7 @@ class ManimRunner:
         self.base_dir = Path(base_dir)
         self.jobs_dir = self.base_dir / "renders" / "jobs"
         self.media_dir = self.base_dir / "renders" / "media"
+        self.job_ids = []
         
         # Ensure directories exist
         self.jobs_dir.mkdir(parents=True, exist_ok=True)
@@ -61,6 +62,7 @@ class ManimRunner:
         
         # 3. Create job file
         job_id = f"job_{uuid.uuid4().hex[:8]}"
+        self.job_ids.append(job_id)
         script_path = self.jobs_dir / f"{job_id}.py"
         
         try:
@@ -175,3 +177,24 @@ class ManimRunner:
                     os.remove(script_path)
                 except Exception:
                     pass
+
+    def cleanup_jobs(self):
+        import shutil
+        for job_id in self.job_ids:
+            # Clean up videos directory
+            job_dir = self.media_dir / "videos" / job_id
+            if job_dir.exists():
+                try:
+                    shutil.rmtree(job_dir)
+                    logger.info(f"Cleaned up intermediate artifacts for job: {job_id}")
+                except Exception as e:
+                    logger.error(f"Failed to cleanup job dir {job_dir}: {e}")
+            
+            # Clean up images directory
+            img_dir = self.media_dir / "images" / job_id
+            if img_dir.exists():
+                try:
+                    shutil.rmtree(img_dir)
+                    logger.info(f"Cleaned up intermediate image artifacts for job: {job_id}")
+                except Exception as e:
+                    logger.error(f"Failed to cleanup image job dir {img_dir}: {e}")

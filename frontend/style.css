@@ -443,7 +443,7 @@ select option {
 }
 
 .status-dot.idle { background-color: var(--text-muted); }
-.status-dot.generating { background-color: var(--accent-purple); animation: pulseDot 1.5s infinite; }
+.status-dot.generating { background-color: var(--warning); animation: pulseDot 1.5s infinite; color: var(--warning); }
 .status-dot.rendering { background-color: var(--accent-cyan); animation: pulseDot 1.5s infinite; }
 .status-dot.repairing { background-color: var(--warning); animation: pulseDot 1.5s infinite; }
 .status-dot.complete { background-color: var(--success); box-shadow: 0 0 8px var(--success); }
